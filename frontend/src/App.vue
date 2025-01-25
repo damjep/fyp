@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import Navbar from '@/components/Navbar.vue'
-import Login from '@/components/Login.vue'
+import axios from 'axios';
+axios.defaults.baseURL = 'http://127.0.0.1:8000/';
+
 </script>
 
 <template>

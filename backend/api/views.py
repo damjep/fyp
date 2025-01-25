@@ -9,30 +9,13 @@ from django.contrib.auth import authenticate, login
 from typing import Dict, Any
 import json
 from rest_framework.views import APIView
-from .serializers import LoginSerializer
+from .serializers import LoginSerializer, UserSerializer
+from .models import User
+from rest_framework import generics, permissions
+
 
 
 logger = logging.getLogger(__name__)
-
-
-def login_view(request) -> JsonResponse:
-    if request.method == 'POST':
-        try:
-            data: Dict[str, Any] = json.loads(request.body)
-            email: str = data.get('email')
-            password: str = data.get('password')
-
-            user = authenticate(request, email=email, password=password)
-
-            if user:
-                login(request, user)
-                
-                return JsonResponse({'message': 'Login successful'})
-            else:
-                return JsonResponse({'error': 'Invalid credentials'}, status=400)
-        except Exception as e:
-            logger.error(f"Login error: {e}")
-            return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
         
 def get_csrf_token(request) -> JsonResponse:
     token = get_token(request)
@@ -55,3 +38,13 @@ class LoginView(APIView):
             
         else:
             return Response(serializer.errors, status=400)
+        
+    def get(self, request):
+        return get_csrf_token(request)
+    
+class ProfileView(generics.RetrieveAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user  # Returns only the authenticated user
