@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.core.exceptions import ValidationError
 from typing import Optional
 
 class UserManager(BaseUserManager):
@@ -23,12 +24,74 @@ class UserManager(BaseUserManager):
 
     def get_by_natural_key(self, email: str) -> "User":
         return self.get(email=email)
-
+    
+class Shift(models.Model):
+    class Shift_Type(models.TextChoices):
+        AM = 'AM'
+        PM = 'PM'
+        
+    class Days(models.TextChoices):
+        MONDAY = 'Monday'
+        TUESDAY = 'Tuesday'
+        WEDNESDAY = 'Wednesday'
+        THURSDAY = 'Thursday'
+        FRIDAY = 'Friday'
+        SATURDAY = 'Saturday'
+        SUNDAY = 'Sunday'
+        
+    HOURS = [(i, f"{i}:00") for i in range(24)]  # Choices from 0 to 23
+    
+    shift_start = models.IntegerField( choices=HOURS, default=HOURS[0])
+    shift_end = models.IntegerField( choices=HOURS, blank=True )
+    days = models.CharField(max_length=20,
+                             choices=Days.choices, 
+                             default=Days.MONDAY)
+    shift_type = models.CharField(max_length=2, 
+                                  choices=Shift_Type.choices, 
+                                  default='AM')
+    
+    def __str__(self):
+        return f"{self.days} {self.shift_type} from {self.shift_start}:00 to {self.shift_end}:00"
+    
+class Menu(models.Model):
+    class DishType(models.TextChoices):
+        STARTERS = 'Starters'
+        MAINS = 'Mains'
+        DESSERTS = 'Desserts'
+        DRINKS = 'Drinks'
+        
+    class MainProtein(models.TextChoices):
+        CHICKEN = 'Chicken'
+        BEEF = 'Beef'
+        PRAWNS = 'Prawns'
+        VEGETABLES = 'Vegetables'
+        FISH = 'Fish'
+        
+    name = models.CharField(max_length=100)
+    dish_type = models.CharField(max_length=20, choices=DishType.choices)
+    main_protein = models.CharField(max_length=20, choices=MainProtein.choices, blank=True, null=True)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    
+    def clean(self):
+        if self.dish_type == self.DishType.MAINS and not self.main_protein:
+            raise ValidationError('Mains must have a main protein')
+        elif self.dish_type != self.DishType.MAINS and self.main_protein:
+            raise ValidationError({'main_protein': "Main protein should be empty unless dish type is 'Mains'."})
+        
+    def __str__(self):
+        return self.name
+    
 class User(AbstractBaseUser, PermissionsMixin):
+    class Role(models.TextChoices):
+        MANAGER = 'Manager'
+        EMPLOYEE = 'Employee'
+    
+    role = models.CharField(max_length=10, choices=Role.choices, default=Role.EMPLOYEE)
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    shift_available = models.ManyToManyField('Shift', blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
@@ -37,3 +100,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self) -> str:
         return self.email
+
+
+    

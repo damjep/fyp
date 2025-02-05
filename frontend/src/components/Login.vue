@@ -38,14 +38,14 @@ const error = ref('')
 const router = useRouter();
 const email = ref('');
 const password = ref('');
-const token = ref('');
-axios.defaults.baseURL = 'http://127.0.0.1:8000/';
+const tokenA = ref('');
 
 // Fetch CSRF token from server-side
 async function fetchCSRFToken() {
     try {
-        const res = await axios.get('/get-token');
-        token.value = res.data.token;
+        const res = await axios.get('/get-token', {withCredentials: true});
+        tokenA.value = res.data.token;
+        console.log(tokenA.value);
     } catch (error) {
         console.error('Error fetching CSRF token', error);
     }
@@ -62,10 +62,13 @@ async function login() {
                 password: password.value,
             }, {
                 headers: {
-                    'X-CSRFToken': token.value,
-                },
-
+                    'X-CSRFToken': tokenA.value,
+                }, 
+                withCredentials: true,
             })
+
+            localStorage.setItem('token', res.data.token);
+
             if (res.status === 200) {
                 console.log('Logged in successfully');
                 router.push('/'); // Redirect to home page
