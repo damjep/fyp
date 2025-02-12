@@ -33,7 +33,9 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
 
+const userStore = useUserStore();
 const error = ref('')
 const router = useRouter();
 const email = ref('');
@@ -70,6 +72,7 @@ async function login() {
             localStorage.setItem('token', res.data.token);
 
             if (res.status === 200) {
+                await userStore.fetchUserProfile();
                 console.log('Logged in successfully');
                 router.push('/'); // Redirect to home page
             } else {
