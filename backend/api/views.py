@@ -9,8 +9,8 @@ from django.contrib.auth import authenticate, login
 from typing import Dict, Any
 import json
 from rest_framework.views import APIView
-from .serializers import LoginSerializer, UserSerializer
-from .models import User
+from .serializers import LoginSerializer, UserSerializer, MenuSerializer
+from .models import User, Menu
 from rest_framework import generics, permissions
 from django.middleware.csrf import get_token
 from rest_framework.decorators import api_view
@@ -56,6 +56,15 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+    
+class MenuView(generics.ListAPIView):
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+    permissions_classes = [permissions.AllowAny]
+    
+    
+    
+    
     
 @api_view(['GET'])
 def check_auth(request):

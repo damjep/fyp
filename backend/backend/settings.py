@@ -94,7 +94,6 @@ TEMPLATES = [
 ]
 
 # WSGI application
-WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Authentication settings
 AUTHENTICATION_BACKENDS = [

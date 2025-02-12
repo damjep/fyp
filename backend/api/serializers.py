@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Menu
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
@@ -29,6 +29,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             "id", "email", "is_staff", "is_superuser",
             "is_active", "last_login",
-            "groups", "user_permissions"
+            "groups", "user_permissions", 'role'
         ]
+        
+class MenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Menu
+        fields = "__all__"
+    
     
