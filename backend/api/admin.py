@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Shift, Menu
+from .models import User, Shift, Dish, Category, DishType
 
 class UserAdmin(BaseUserAdmin):
     # Fields to be displayed in the admin list view
@@ -29,4 +29,6 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Shift)
-admin.site.register(Menu)
+admin.site.register(Dish)
+admin.site.register(Category)
+admin.site.register(DishType)

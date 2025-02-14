@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import User, Menu
+from .models import User, Category, Dish, DishType
+from django.shortcuts import get_object_or_404
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
@@ -32,9 +33,37 @@ class UserSerializer(serializers.ModelSerializer):
             "groups", "user_permissions", 'role', 'role'
         ]
         
-class MenuSerializer(serializers.ModelSerializer):
+
+        
+class DishTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Menu
+        model = DishType
+        fields = "__all__"
+        
+class DishSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dish
         fields = "__all__"
     
+class MenuSerializer(serializers.ModelSerializer):
+    dishes = DishSerializer(many=True)
+    dish_type = DishTypeSerializer()
     
+    class Meta:
+        model = Category
+        fields = ['id', 'dish_type', 'extra_dish_type', 'dishes' ]
+        
+    def update(self, instance, validated_data):
+        dishes_data = validated_data.get('dishes')
+        
+        
+        for dish_data in dishes_data:
+            dish = get_object_or_404(Dish, pk=dish_data.get('id'))
+            dish.name = dish_data.get('name')
+            dish.price = dish_data.get('price')
+            dish.save()
+        
+        instance.save()
+        
+        return instance
+            

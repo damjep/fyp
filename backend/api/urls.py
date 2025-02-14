@@ -6,7 +6,9 @@ from .views import (
     get_csrf_token,
     ProfileView,
     check_auth,
-    MenuView
+    MenuView,
+    MenuViewEditor,
+    DishEditor,
 )
 
 urlpatterns = [
@@ -15,5 +17,8 @@ urlpatterns = [
     path('get-token/', get_csrf_token ),
     path('api/check-auth/', check_auth, name='check_auth'),
     path('api/get-menu', MenuView.as_view(), name='menu-view'),
+    path('api/edit-menu/<int:pk>', MenuViewEditor.as_view(), name='menu-edit'),
+    path('api/edit-dish/<int:pk>', DishEditor.as_view(), name='dish-edit'),
+    path('api/edit-dish/', DishEditor.as_view(), name='dish-edit'),
 
 ]

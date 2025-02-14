@@ -52,32 +52,28 @@ class Shift(models.Model):
     
     def __str__(self):
         return f"{self.days} {self.shift_type} from {self.shift_start}:00 to {self.shift_end}:00"
-    
-class Menu(models.Model):
-    class DishType(models.TextChoices):
-        STARTERS = 'Starters'
-        MAINS = 'Mains'
-        DESSERTS = 'Desserts'
-        DRINKS = 'Drinks'
-        
-    class MainProtein(models.TextChoices):
-        CHICKEN = 'Chicken'
-        BEEF = 'Beef'
-        PRAWNS = 'Prawns'
-        VEGETABLES = 'Vegetables'
-        FISH = 'Fish'
-        
+
+class DishType(models.Model):
     name = models.CharField(max_length=100)
-    dish_type = models.CharField(max_length=20, choices=DishType.choices)
-    main_protein = models.CharField(max_length=20, choices=MainProtein.choices, blank=True, null=True)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
     
-    def clean(self):
-        if self.dish_type == self.DishType.MAINS and not self.main_protein:
-            raise ValidationError('Mains must have a main protein')
-        elif self.dish_type != self.DishType.MAINS and self.main_protein:
-            raise ValidationError({'main_protein': "Main protein should be empty unless dish type is 'Mains'."})
-        
+    def __str__(self):
+        return self.name   
+     
+class Category(models.Model):
+    dish_type = models.ForeignKey(DishType, on_delete=models.CASCADE, blank=True)
+    extra_dish_type = models.CharField(max_length=100, blank=True)
+    dishes = models.ManyToManyField('Dish', related_name='dishes')
+    
+    def __str__(self):
+        return self.dish_type.name + self.extra_dish_type 
+    
+
+    
+class Dish(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    description = models.TextField(blank=True)
+
     def __str__(self):
         return self.name
     
