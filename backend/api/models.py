@@ -55,19 +55,18 @@ class Shift(models.Model):
 
 class DishType(models.Model):
     name = models.CharField(max_length=100)
-    
+    extra_dish_type = models.CharField(max_length=100, blank=True)
+
     def __str__(self):
-        return self.name   
+        return self.name  + " " + self.extra_dish_type  
      
 class Category(models.Model):
     dish_type = models.ForeignKey(DishType, on_delete=models.CASCADE, blank=True)
-    extra_dish_type = models.CharField(max_length=100, blank=True)
     dishes = models.ManyToManyField('Dish', related_name='dishes')
     
     def __str__(self):
-        return self.dish_type.name + self.extra_dish_type 
+        return str(self.dish_type)
     
-
     
 class Dish(models.Model):
     name = models.CharField(max_length=100)

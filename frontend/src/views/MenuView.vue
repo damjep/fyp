@@ -1,20 +1,25 @@
 <template>
-    <div v-if="menu" v-for="(items, category) in menu" >
-        <h1>{{ category}}</h1>
-        <div  v-for="item in items" :key="items.id">
-            <h4>{{ item.extra_dish_type }}</h4>
-            <div v-for="dish in item.dishes">
-                <ul class="list-group list-group-horizontal" :key="dish.id">
-                    <li class="list-group-item">{{ dish.name }}</li>
-                    <li class="list-group-item">GBP {{ dish.price }}</li>
-                    <li class="list-group-item"> {{ dish.description }}</li>
-                </ul>
-            </div>
-        </div>
-        
-        <ul class="list-group" >
+    <div>
+        <div v-if="menu" v-for="(items) in menu" >
+            <h1 class="m-2">{{ items.dish_type}}</h1>
 
-        </ul>
+            <div v-for="(item , category) in items.extra_dish_types" class="mt-3">
+                <h3>{{ category }}</h3>
+
+                <div v-for="dish in item" :key="items.id">
+                    <ul class="list-group list-group-horizontal" :key="dish.id">
+                        <li class="list-group-item">{{ dish.name }}</li>
+                        <li class="list-group-item">GBP {{ dish.price }}</li>
+                        <li class="list-group-item"> {{ dish.description }}</li>
+                    </ul>
+                </div>
+            </div>
+               
+            
+            <ul class="list-group" >
+
+            </ul>
+        </div> 
     </div>
 </template>
 

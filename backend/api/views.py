@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login
 from typing import Dict, Any
 import json
 from rest_framework.views import APIView
-from .serializers import LoginSerializer, UserSerializer, MenuSerializer, DishSerializer
+from .serializers import LoginSerializer, UserSerializer, MenuSerializer, MenuEditSerializer ,DishSerializer
 from .models import User, Category, Dish
 from rest_framework import generics, permissions
 from django.middleware.csrf import get_token
@@ -62,24 +62,36 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         return self.request.user
     
 class MenuView(generics.ListAPIView):
-    queryset = Category.objects.order_by('dish_type').all()
+    queryset = Category.objects.prefetch_related('dishes', 'dish_type').all()
     serializer_class = MenuSerializer
-    permissions_classes = [permissions.AllowAny]
-    
+    permission_classes = [permissions.AllowAny]
+
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serialized_data = self.get_serializer(queryset, many=True).data
+        categories = self.get_queryset()
+        grouped_menu = defaultdict(lambda: defaultdict(list))
 
-        # Group menus by dish_type
-        grouped_data = defaultdict(list)
-        for item in serialized_data:
-            dish_type_name = item["dish_type"]["name"]
-            grouped_data[dish_type_name].append(item)
+        for category in categories:
+            dish_type = category.dish_type.name  # e.g., "Mains"
+            extra_dish_type = category.dish_type.extra_dish_type  # e.g., "Chicken", "Beef"
 
-        return Response(grouped_data)
+            for dish in category.dishes.all():
+                grouped_menu[dish_type][extra_dish_type].append({
+                    "id": dish.id,
+                    "name": dish.name,
+                    "price": str(dish.price),
+                    "description": dish.description
+                })
+
+        # Convert defaultdict to normal dictionary for JSON response
+        response_data = [{"dish_type": dish_type, "extra_dish_types": extra_types} for dish_type, extra_types in grouped_menu.items()]
+
+        return Response(response_data)
+    
+    
+    
 
 class  MenuViewEditor(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = MenuSerializer
+    serializer_class = MenuEditSerializer
     queryset = Category.objects.all()
     permission_classes = [permissions.IsAuthenticated]
     
