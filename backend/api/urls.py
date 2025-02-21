@@ -9,6 +9,10 @@ from .views import (
     MenuView,
     MenuViewEditor,
     DishEditor,
+    GetDishTypesView,
+    ListMenuRawView,
+    EditDishTypesView,
+    MenuListViewEditor
 )
 
 urlpatterns = [
@@ -20,5 +24,8 @@ urlpatterns = [
     path('api/edit-menu/<int:pk>', MenuViewEditor.as_view(), name='menu-edit'),
     path('api/edit-dish/<int:pk>', DishEditor.as_view(), name='dish-edit'),
     path('api/edit-dish/', DishEditor.as_view(), name='dish-edit'),
-
+    path('api/get-dish-types', GetDishTypesView.as_view(), name='fetch-dish-types'),
+    path('api/get-list-raw', ListMenuRawView.as_view(), name='list-raw'),
+    path('api/edit-dish-types/<int:pk>', EditDishTypesView.as_view()),
+    path('api/menu-list-editor/', MenuListViewEditor.as_view()),
 ]

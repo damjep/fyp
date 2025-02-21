@@ -34,7 +34,6 @@ class UserSerializer(serializers.ModelSerializer):
         ]
     
 class DishTypeSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=True)
      
     class Meta:
         model = DishType
@@ -59,7 +58,10 @@ class MenuEditSerializer(serializers.ModelSerializer):
     def create_or_update_dishes(self, dishes):
         dishes_id = []
         for dish in dishes:
-            dish_instance , created = Dish.objects.update_or_create(pk=dish['id'], defaults=dish)
+            if 'id' not in dish:
+                dish_instance, created = Dish.objects.update_or_create(name=dish['name'], defaults=dish)
+            else:
+                dish_instance , created = Dish.objects.update_or_create(pk=dish['id'], defaults=dish)
             dishes_id.append(dish_instance.pk)
             
         return dishes_id
@@ -137,3 +139,39 @@ class MenuSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
             
+class CategoryListSerializer(serializers.ModelSerializer):
+    dishes = DishSerializer(many=True)
+    dish_type = DishTypeSerializer(read_only=False)
+    
+    class Meta:
+        model = Category
+        fields = ['id', 'dish_type', 'dishes' ]
+        
+    def get_or_create_dishes(self, dishes):
+        dishes_id = []
+        for dish in dishes:
+            dish_instance , created = Dish.objects.get_or_create(pk=dish['id'], defaults=dish)
+            dishes_id.append(dish_instance.pk)
+            
+        return dishes_id    
+    
+    def create(self, validated_data):
+        dish_type_data = validated_data.pop('dish_type', None)
+        dishes = validated_data.pop('dishes', [])
+
+        # If dish_type exists, retrieve or create it
+        dish_type = None
+        if dish_type_data:
+            dish_type, _ = DishType.objects.get_or_create(name=dish_type_data['name'], extra_dish_type=dish_type_data['extra_dish_type'])
+
+        # Create Category with or without dish_type
+        category = Category.objects.create(dish_type=dish_type, **validated_data)
+
+        # Assign dishes to the created category
+        category.dishes.set(self.get_or_create_dishes(dishes))
+
+        return category
+    
+    
+
+    

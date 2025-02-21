@@ -9,8 +9,8 @@ from django.contrib.auth import authenticate, login
 from typing import Dict, Any
 import json
 from rest_framework.views import APIView
-from .serializers import LoginSerializer, UserSerializer, MenuSerializer, MenuEditSerializer ,DishSerializer
-from .models import User, Category, Dish
+from .serializers import LoginSerializer, UserSerializer, CategoryListSerializer, MenuSerializer, MenuEditSerializer, DishTypeSerializer ,DishSerializer
+from .models import User, Category, Dish, DishType
 from rest_framework import generics, permissions
 from django.middleware.csrf import get_token
 from rest_framework.decorators import api_view
@@ -87,18 +87,39 @@ class MenuView(generics.ListAPIView):
 
         return Response(response_data)
     
+class GetDishTypesView(generics.ListCreateAPIView):
+    queryset = DishType.objects.all()
+    serializer_class = DishTypeSerializer
+    permission_classes = [permissions.AllowAny]
     
+class EditDishTypesView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DishTypeSerializer
+    queryset = DishType.objects.all()
+    permission_classes = [permissions.AllowAny]
     
+    def get_object(self):
+        obj = get_object_or_404(DishType, pk=self.kwargs["pk"])  # Get by primary key
+        self.check_object_permissions(self.request, obj)  # Ensure permissions are enforced
+        return obj
+    
+class ListMenuRawView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = MenuSerializer
 
 class  MenuViewEditor(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MenuEditSerializer
     queryset = Category.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     
     def get_object(self):
         obj = get_object_or_404(Category, pk=self.kwargs["pk"])  # Get by primary key
         self.check_object_permissions(self.request, obj)  # Ensure permissions are enforced
         return obj
+    
+class MenuListViewEditor(generics.ListCreateAPIView):
+    serializer_class = CategoryListSerializer
+    queryset = Category.objects.all()
+    permission_classes = [permissions.AllowAny]
     
 class DishEditor(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DishSerializer
