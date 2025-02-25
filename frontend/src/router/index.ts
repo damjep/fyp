@@ -4,6 +4,7 @@ import HomeView from '@/views/HomeView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import MenuView from '@/views/MenuView.vue'
 import MenuEditorView from '@/views/ManagerView/MenuEditorView.vue'
+import ManagerShiftMaker from '@/views/ManagerView/shifts/ManagerShiftMaker.vue'
 
 
 const router = createRouter({
@@ -29,6 +30,11 @@ const router = createRouter({
       path: '/menu-edit',
       name: 'menu-edit',
       component: MenuEditorView,
+    },
+    {
+      path: '/manager-shifts-edit',
+      name: 'manager-shifts-edit',
+      component: ManagerShiftMaker,
     },
     {
       path: '/profile',

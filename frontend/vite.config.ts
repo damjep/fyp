@@ -21,6 +21,11 @@ export default defineConfig(({ mode }) => ({
                 changeOrigin: true,
                 secure: false,
             },
+            '/shifts': {
+                target: 'http://127.0.0.1:8000',  // Proxy API requests to Django
+                changeOrigin: true,
+                secure: false,
+            },
             '/static': {
                 target: 'http://127.0.0.1:8000',  // Proxy static files during development
                 changeOrigin: true,
