@@ -10,73 +10,47 @@
         <ShiftAddModal @data-modal-add="handleDataModal"/>
     </div>
 
+
     <div v-if="shifts">
-        <div v-for="item in shifts" class="card m-2">
-            <form @submit.prevent="editShift(item)" class="card-body row">
+        <table  class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Days</th>
+                    <th scope="col">Shift Type</th>
+                    <th scope="col">Shift Start & End</th>
+                    <th scope="col">Edit</th>
+                </tr>
+            </thead>
+            <tbody v-for="x in shifts">
+                <tr  :key="x.id">
+                    <th scope="row">{{ x.id }}</th>
+                    <td >{{ x.days }}</td>
+                    <td >{{ x.shift_type }}</td>
+                    <td>Time: {{ x.shift_start }} - {{ x.shift_end }}</td>
+                    <!-- Button trigger modal -->
+                    <td>
+                        <button type="button" class="btn btn-primary m-2" 
+                        data-bs-toggle="modal" :data-bs-target="`#edit${x.id}`">
+                            Edit Shifts
+                        </button>
+                    </td>
+                </tr>
 
-                <div class="row">
-                    <div class="input-group mb-3 col">
-                        <span class="input-group-text" id="basic-addon1">ID</span>
-                        <input type="text" class="form-control"
-                        v-model="item.id" aria-describedby="basic-addon1" readonly>
-                    </div>
-
-                    <div class="col flex">
-                        <button type="submit" class="btn btn-success w-50">Save</button>
-                        <button type="button" class="btn btn-danger w-50">Delete</button>
-                    </div>
+                <div v-if="x">
+                    <ShiftEditModal :idx="x.id" :data="x" :edit-data-modal="dataModal" />
                 </div>
-                
-                
-                <div class="row">
-                    <div class="input-group mb-3 col">
-                        <span class="input-group-text" id="basic-addon1">Days</span>
-                        <select class="form-select" 
-                        aria-label="Default select example" v-model="item.days">
-                            <option selected>Open this select menu</option>
-                            <option v-for="day in dataModal.days">{{ day.key }}</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group mb-3 col">
-                        <span class="input-group-text" id="basic-addon1">Shift Type</span>
-                        <select class="form-select" 
-                        aria-label="Default select example" v-model="item.shift_type">
-                            <option selected></option>
-                            <option v-for="shiftType in dataModal.shift_types">{{ shiftType.key }}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="input-group mb-3 col">
-                        <span class="input-group-text" id="basic-addon1">Shift Start</span>
-                        <select class="form-select" 
-                        aria-label="Default select example" v-model="item.shift_start">
-                            <option selected></option>
-                            <option v-for="shiftStart in dataModal.hours">{{ shiftStart.key }}</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group mb-3 col">
-                        <span class="input-group-text" id="basic-addon1">Shift End</span>
-                        <select class="form-select" 
-                        aria-label="Default select example" v-model="item.shift_end">
-                            <option selected></option>
-                            <option v-for="shiftEnd in dataModal.hours">{{ shiftEnd.key }}</option>
-                        </select>
-                    </div>
-                </div>
-            </form>
-        </div>
-        
+            </tbody>
+        </table>
     </div>
+
 </template>
 
 <script setup lang="ts">
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import ShiftAddModal from './ShiftAddModal.vue';
+import ShiftEditModal from './ShiftEditModal.vue';
 
 const shifts = ref();
 const dataModal = ref<{
@@ -104,23 +78,6 @@ async function fetchShifts() {
 
     } catch (error) {
         console.error('Error fetching shifts:', error);
-    }
-}
-
-async function editShift(item:any) {
-    try {
-        await axios.patch(`/shifts/update-shift/${item.id}`, {
-            days: item.days,
-            shift_type: item.shift_type,
-            shift_start: item.shift_start,
-            shift_end: item.shift_end,
-        }, {
-            withCredentials: true,
-        })
-
-        console.log('Shift edited:', item);
-    } catch (err){
-        console.error('Error editing shift:', err);
     }
 }
 
