@@ -22,5 +22,7 @@ urlpatterns = [
     path('', include('api.urls')),
     path('api/', include('api.urls')),
     path('', include('shifts.urls')),
+    path('', include('inventory.urls')),
+    
     # API endpoints
 ]

@@ -20,6 +20,7 @@
                     <th scope="col">Shift Type</th>
                     <th scope="col">Shift Start & End</th>
                     <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
                 </tr>
             </thead>
             <tbody v-for="x in shifts">
@@ -35,10 +36,17 @@
                             Edit Shifts
                         </button>
                     </td>
+                    <td>
+                        <button type="button" class="btn btn-danger m-2" 
+                        data-bs-toggle="modal" :data-bs-target="`#delete${x.id}`">
+                            Delete Shifts
+                        </button>
+                    </td>
                 </tr>
 
                 <div v-if="x">
                     <ShiftEditModal :idx="x.id" :data="x" :edit-data-modal="dataModal" />
+                    <ShiftDeleteModal :idDelete="x.id"/>
                 </div>
             </tbody>
         </table>
@@ -51,6 +59,7 @@ import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import ShiftAddModal from './ShiftAddModal.vue';
 import ShiftEditModal from './ShiftEditModal.vue';
+import ShiftDeleteModal from './ShiftDeleteModal.vue';
 
 const shifts = ref();
 const dataModal = ref<{
