@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'api',
     'shifts',
     'inventory',
+    'posFin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
