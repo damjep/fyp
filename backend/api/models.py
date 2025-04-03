@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from typing import Optional
 from django.apps import apps
 
+
 class UserManager(BaseUserManager):
     def create_user(self, email: str, password: Optional[str] = None, **extra_fields: dict) -> "User":
         if not email:
@@ -69,6 +70,5 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self) -> str:
         return self.email
-
 
     

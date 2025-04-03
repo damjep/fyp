@@ -72,9 +72,9 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
-import { onMounted, ref } from 'vue';
-import ModalMenu from './ModalMenu.vue';
+import axios from 'axios'
+import { onMounted, ref } from 'vue'
+import ModalMenu from './ModalMenu.vue'
 import ModalMenuAdd from './ModalMenuAdd.vue';
 import ModalMenuAddDishType from './ModalMenuAddDishType.vue';
 import ModalMenuEditCategory from './ModalMenuEditCategory.vue';
@@ -82,7 +82,7 @@ import ModalDeleteDish from './ModalDeleteDish.vue';
 
 const menu = ref()
 const listRaw = ref()
-const listDishTypes = ref();
+const listDishTypes = ref()
 const visibility = ref()
 
 async function fetchMenu(){

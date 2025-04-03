@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'shifts',
     'inventory',
     'posFin',
+    'finance',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -12,7 +12,8 @@ from .views import (
     GetDishTypesView,
     ListMenuRawView,
     EditDishTypesView,
-    MenuListViewEditor
+    MenuListViewEditor,
+    viewAllUserShiftAvailability
 )
 
 urlpatterns = [
@@ -28,4 +29,5 @@ urlpatterns = [
     path('api/get-list-raw', ListMenuRawView.as_view(), name='list-raw'),
     path('api/edit-dish-types/<int:pk>', EditDishTypesView.as_view()),
     path('api/menu-list-editor/', MenuListViewEditor.as_view()),
+    path('api/get-users-shift-availability', viewAllUserShiftAvailability.as_view(), name='get-users-shift-availability'),
 ]

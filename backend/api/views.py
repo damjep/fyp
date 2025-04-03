@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login
 from typing import Dict, Any
 import json
 from rest_framework.views import APIView
-from .serializers import LoginSerializer, UserSerializer, CategoryListSerializer, MenuSerializer, MenuEditSerializer, DishTypeSerializer ,DishSerializer
+from .serializers import LoginSerializer, UserSerializer, CategoryListSerializer, MenuSerializer, MenuEditSerializer, DishTypeSerializer ,DishSerializer, UserShiftsOnlySerializer
 from .models import User, Category, Dish, DishType
 from rest_framework import generics, permissions
 from django.middleware.csrf import get_token
@@ -139,3 +139,22 @@ def check_auth(request):
         return Response({"message": "User is authenticated", "user": request.user.email})
     else:
         return Response({"message": "User is not authenticated"}, status=403)
+
+class viewAllUserShiftAvailability(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        users = User.objects.prefetch_related('shift_available').all()
+        
+        shift_dict = defaultdict(list)  # Stores shifts as keys, and list of users as values
+        
+        for user in users:
+            for shift in user.shift_available.all():
+                shift_dict[str(shift)].append({"id": user.id, "name": user.name})  # Store user ID & name
+        
+        # Convert dictionary to a list of dicts for JSON response
+        return [{"shift": shift, "users": sorted(users, key=lambda x: x['name'])} for shift, users in sorted(shift_dict.items())]
+
+    def list(self, request, *args, **kwargs):
+        data = self.get_queryset()
+        return Response(data)

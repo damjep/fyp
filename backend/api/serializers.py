@@ -172,6 +172,14 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
         return category
     
+class UserShiftsOnlySerializer(serializers.ModelSerializer):
+    shift_available = serializers.SerializerMethodField()  # Change to SerializerMethodField
+
+    class Meta:
+        model = User
+        fields = ['id', 'name', 'email', 'shift_available']
+
+    
     
 
     

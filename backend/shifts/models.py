@@ -32,7 +32,6 @@ class Shift(models.Model):
     
     def __str__(self):
         return f"{self.days} {self.shift_type} from {self.shift_start}:00 to {self.shift_end}:00"
-
     
 class Rota(models.Model):
     users = models.ManyToManyField(User, related_name='rotas')

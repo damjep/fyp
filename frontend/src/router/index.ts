@@ -3,8 +3,9 @@ import Login from '@/components/Login.vue'
 import HomeView from '@/views/HomeView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import MenuView from '@/views/MenuView.vue'
-import MenuEditorView from '@/views/ManagerView/MenuEditorView.vue'
+import MenuEditorView from '@/views/ManagerView/menu/MenuEditorView.vue'
 import ManagerShiftMaker from '@/views/ManagerView/shifts/ManagerShiftMaker.vue'
+import Pos from '@/views/PosV/Pos.vue'
 
 
 const router = createRouter({
@@ -35,6 +36,11 @@ const router = createRouter({
       path: '/manager-shifts-edit',
       name: 'manager-shifts-edit',
       component: ManagerShiftMaker,
+    },
+    {
+      path: '/pos',
+      name: 'pos',
+      component: Pos,
     },
     {
       path: '/profile',
