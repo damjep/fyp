@@ -21,7 +21,7 @@ class Order(models.Model):
         ('takeaway', 'takeaway')
     ]
     
-    order_number = models.CharField(max_length=20 ,unique=True)
+    order_number = models.CharField(max_length=20 )
     table_Number = models.ForeignKey(Table, on_delete=models.CASCADE, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     order_type = models.CharField(max_length=20, choices=ORDER_TYPES, default='dine-in')
@@ -45,16 +45,8 @@ class Order(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.pk:
-            super().save(*args, **kwargs)  # Save first to get a primary key
-        
-    # Only update total_price if it has changed
-        new_total_price = sum(item.total_price for item in self.orderitem_set.all())
-        
-        if self.total_price != new_total_price:
-            self.total_price = new_total_price
-            super().save(update_fields=['total_price'])
-            
-        super().save( *args, **kwargs)
+            super().save(*args, **kwargs)  # Save to get a primary key
+        super().save(*args, **kwargs)
         
         
     def __str__(self):

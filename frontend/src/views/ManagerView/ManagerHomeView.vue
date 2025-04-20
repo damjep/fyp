@@ -3,6 +3,6 @@ import ManagerNavDrawer from '@/components/ManagerNavDrawer.vue';
 
 </script>
 
-<template>
+<template >
     <ManagerNavDrawer />
 </template>

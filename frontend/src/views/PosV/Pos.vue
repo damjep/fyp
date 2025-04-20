@@ -33,7 +33,6 @@
     </div>
 </div>
 
-
 </template>
 
 <script setup lang="ts">
@@ -41,10 +40,12 @@ import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import MenuView from '../MenuView.vue';
 import AddOrderForm from './addOrderForm.vue';
+import TableViewModal from './TableView/tableViewModal.vue';
 
 const orderItems = ref()
 const orderArray = ref()
 const menu = ref()
+const tab = ref()
 
 function addOrderItem() {
     orderItems.value.push()

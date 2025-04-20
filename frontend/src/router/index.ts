@@ -6,6 +6,7 @@ import MenuView from '@/views/MenuView.vue'
 import MenuEditorView from '@/views/ManagerView/menu/MenuEditorView.vue'
 import ManagerShiftMaker from '@/views/ManagerView/shifts/ManagerShiftMaker.vue'
 import Pos from '@/views/PosV/Pos.vue'
+import PosTabs from '@/views/PosV/posTabs/posTabs.vue'
 
 
 const router = createRouter({
@@ -40,7 +41,7 @@ const router = createRouter({
     {
       path: '/pos',
       name: 'pos',
-      component: Pos,
+      component: PosTabs,
     },
     {
       path: '/profile',

@@ -10,12 +10,13 @@ axios.defaults.withCredentials = true;  // Ensures cookies are sent with each re
 </script>
 
 <template>
-    <Navbar />
+  <v-app>
 
+    <Navbar />
   <div class="container mt-3">
     <router-view />
   </div>
-  
+  </v-app>
 </template>
 
 <style scoped>
