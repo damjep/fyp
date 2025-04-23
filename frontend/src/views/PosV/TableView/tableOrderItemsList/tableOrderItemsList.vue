@@ -1,8 +1,9 @@
 <template>
     <div class="card" style="height: 30vh;">
         <div class="card-body">
-            <div style="overflow-y: scroll; max-height: 50%;">
-                <table class="table" >
+            <div 
+            style="overflow-y: auto; max-height: 28vh;">
+                <table class="table p-2" >
                     <thead class="sticky-top">
                         <tr>
                             <th scope="col">Dish</th>
@@ -11,8 +12,7 @@
                             <th scope="col">Total</th>
                             <th></th>
                         </tr>
-                    </thead>
-                    
+                    </thead>                    
                     <tbody v-if="orderData" >
                         
                         <tr  v-for="items in orderData" 
@@ -28,6 +28,13 @@
                                 </button>
                             </td>
                         </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="5"
+                            class="text-center">no orders yet</td>
+                        </tr>
+                        
                     </tbody>
                 </table>
             </div>

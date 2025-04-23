@@ -45,14 +45,22 @@ const seatedTable = ref<number[]>([]);
 const seatedTableData = ref<any[]>([]);
 
 const props = defineProps<{
-  tableid: number
+  tableid: number;
+  refresh: boolean;
 }>()
+
 
 watch(() => props.tableid, async (newTableID) => {
   if(newTableID){
     await getTableList()
   }
 })
+
+watch(() => props.refresh, async () => {
+  await getTableList();
+  await getActiveTables();
+})
+
 const emit = defineEmits(['tableSelected', 'orderID']);
 
 function selectTable(id: number, order_id: number|null) {
@@ -63,7 +71,8 @@ function selectTable(id: number, order_id: number|null) {
 async function getTableList() {
   try {
     const res = await axios.get('pos-api/get-table-list');
-    tableList.value = res.data;
+    const sorted = res.data.sort((a: any, b: any) => a.tableNo - b.tableNo)
+    tableList.value = sorted;
   } catch (error) {
     console.error('Error:', error);
   }

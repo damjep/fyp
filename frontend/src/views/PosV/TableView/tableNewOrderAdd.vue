@@ -119,14 +119,15 @@ async function getChoices() {
 async function addNewOrderItem(on: number, num_people: number, tn: number){
     try{
         const res = await axios.post('pos-api/add-order-by-table/', {
+            order_type: 'dine-in',
             order_number: on,
             num_people: num_people,
             table_Number: tn,
             status: 'pending'
         }, {withCredentials:true})
 
-        console.log(res.data)
-        emit('order-item-added')
+        console.log(res.data.id)
+        emit('order-item-added', res.data.id)
 
 
     } catch(err){

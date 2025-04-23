@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import request, JsonResponse
-from .models import Order, Table, OrderItem
+from .models import Order, Table, OrderItem, Payment
 from rest_framework import generics, permissions
 from .serializers import (viewTableSerializer, 
                           addOrderByTableSerializer, 
                           orderItemsPerIdSerializer,
-                          addOrderItemsSerializer)
+                          addOrderItemsSerializer,
+                          getOrCreatePayment)
 from rest_framework import serializers
 
 def getStatusChoices(request):
@@ -21,12 +22,18 @@ def get_active_table_numbers(request):
     data = [
         {
             'order_id': order.id,
-            'table_number': order.table_Number.tableNo,
+            'table_number': order.table_Number.tableNo if order.table_Number else None,
         }
         for order in active_orders
     ]
 
     return JsonResponse({'active_orders': data})
+
+## get payment methods
+class getOrCreatePayment(generics.ListCreateAPIView):
+    serializer_class = getOrCreatePayment
+    permission_classes = [permissions.AllowAny]
+    queryset = Payment.objects.all()
 
 class getOrderByID(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = addOrderByTableSerializer
@@ -58,7 +65,7 @@ class getOrderItems(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method == 'POST':   
             return addOrderItemsSerializer
         return orderItemsPerIdSerializer
 

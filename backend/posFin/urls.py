@@ -8,6 +8,8 @@ from .views import (
     get_active_table_numbers,
     getOrderItems,
     deleteOrderItems,
+    getOrCreatePayment,
+    
 )
 
 urlpatterns = [
@@ -20,6 +22,9 @@ urlpatterns = [
     
     ## tabViewModel
     path('pos-api/<int:order_id>/items/', getOrderItems.as_view()),
+    
+    #paymentComponent
+    path('pos-api/get-create-payment/', getOrCreatePayment.as_view() ),
     
     #delete orderitems from order
     path('pos-api/<int:order_id>/items/<int:order_item_id>', deleteOrderItems.as_view())

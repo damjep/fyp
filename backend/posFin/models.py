@@ -22,7 +22,7 @@ class Order(models.Model):
     ]
     
     order_number = models.CharField(max_length=20 )
-    table_Number = models.ForeignKey(Table, on_delete=models.CASCADE, blank=True)
+    table_Number = models.ForeignKey(Table, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     order_type = models.CharField(max_length=20, choices=ORDER_TYPES, default='dine-in')
     num_people = models.IntegerField()
@@ -36,16 +36,21 @@ class Order(models.Model):
         self.save(update_fields=['total_price']) 
         
     def clean(self):
-        if self.order_type == 'dine-in' and (self.num_people <=0 or self.num_people == None) and self.table_Number == None:
-            raise ValidationError('Dine In must Place Num People')
-        if self.order_type == 'takeaway' and (self.num_people > 0):
-            raise ValidationError('Takeaway should not have Num People')
+        if self.order_type == 'dine-in':
+            if self.num_people is None or self.num_people <= 0:
+                raise ValidationError('Dine-in orders must have a positive number of people.')
+            if self.table_Number is None:
+                raise ValidationError('Dine-in orders must have an assigned table.')
+        elif self.order_type == 'takeaway':
+            if self.num_people and self.num_people > 0:
+                raise ValidationError('Takeaway orders should not have a number of people.')
+            if self.table_Number:
+                raise ValidationError('TakeAway Cant be Seated')
+
         return super().clean()
             
     
     def save(self, *args, **kwargs):
-        if not self.pk:
-            super().save(*args, **kwargs)  # Save to get a primary key
         super().save(*args, **kwargs)
         
         
@@ -84,9 +89,9 @@ class Payment(models.Model):
         self.order.status = 'paid'
         
     def clean(self):
-        if self.order.total_price >= self.amount_paid:
-            raise ValidationError("Amount Paid is Less ")
-        if self.amount_paid > self.order.total_price:
+        if self.order.total_price > self.amount_paid:
+            raise ValidationError("Amount Paid is Less")
+        if self.amount_paid >= self.order.total_price:
             self.order.tips = self.amount_paid - self.order.total_price
             self.order.save(update_fields=['tips'])
         super().clean()
