@@ -24,6 +24,12 @@ class LoginSerializer(serializers.Serializer):
         return data
 
 
+class ListUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["name", "email", "role"]
+        
+        
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

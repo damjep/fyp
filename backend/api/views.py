@@ -9,7 +9,12 @@ from django.contrib.auth import authenticate, login, logout
 from typing import Dict, Any
 import json
 from rest_framework.views import APIView
-from .serializers import LoginSerializer, UserSerializer, CategoryListSerializer, MenuSerializer, MenuEditSerializer, DishTypeSerializer ,DishSerializer, UserShiftsOnlySerializer
+from .serializers import (
+    LoginSerializer, UserSerializer, 
+    CategoryListSerializer, MenuSerializer, 
+    MenuEditSerializer, DishTypeSerializer ,
+    DishSerializer, UserShiftsOnlySerializer,
+    ListUserSerializer, )
 from .models import User, Category, Dish, DishType
 from rest_framework import generics, permissions
 from django.middleware.csrf import get_token
@@ -18,9 +23,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from rest_framework.permissions import AllowAny
 from collections import defaultdict
 from django.shortcuts import get_object_or_404
-
-
-
+from django.db.models import Count
 
 logger = logging.getLogger(__name__)
         
@@ -67,7 +70,19 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+## Manager Users
+class listAllUsers(generics.ListAPIView):
+    serializer_class = ListUserSerializer
+    queryset = User.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
     
+def countAllUsers(request):
+    if request.method == 'GET':
+        data = User.objects.values('role').annotate(count=Count('role'))
+        return JsonResponse(list(data), safe=False)
+
+## Menus  
 class MenuView(generics.ListAPIView):
     queryset = Category.objects.prefetch_related('dishes', 'dish_type').all()
     serializer_class = MenuSerializer

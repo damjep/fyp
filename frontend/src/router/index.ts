@@ -8,6 +8,8 @@ import ManagerShiftMaker from '@/views/ManagerView/shifts/ManagerShiftMaker.vue'
 import Pos from '@/views/PosV/Pos.vue'
 import PosTabs from '@/views/PosV/posTabs/posTabs.vue'
 import { useUserStore } from '@/stores/userStore'
+import ListUsersView from '@/views/ManagerView/employees/listUsersView.vue'
+import DashboardManager from '@/views/ManagerView/Dashboard/dashboardManager.vue'
 
 
 const router = createRouter({
@@ -49,6 +51,18 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: ProfileView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/list-users',
+      name: 'listUsers',
+      component: ListUsersView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardManager,
       meta: { requiresAuth: true },
     },
     { path: '/:pathMatch(.*)*', redirect: '/' },

@@ -33,6 +33,27 @@ const userStore = useUserStore()
         </template>
       </v-list-item> 
 
+      <v-divider></v-divider>
+
+      <!--Profile View-->
+      <v-list-item link @click="router.push('/dashboard')">
+        <template #default>
+          <v-icon class="me-2" icon="mdi-account" />
+          <span>Dashboard</span>
+        </template>
+      </v-list-item> 
+
+      <v-divider></v-divider>
+
+      <!--List Users Link-->
+      <v-list-item v-if="userStore.role == 'Manager'"
+      link @click="router.push('/list-users')">
+      <template #default>
+        <v-icon class="me-2" icon="mdi-view-list-outline" />
+        <span>Employees</span>
+      </template>
+      </v-list-item>
+
       <!-- Link-->
       <v-list-item link @click="router.push('/')">
       <template #default>
@@ -70,14 +91,20 @@ const userStore = useUserStore()
       </v-list-item>
       
       <!-- Link-->
+      <v-list-item link @click="router.push('/list-users')">
+      <template #default>
+        <v-icon class="me-2" icon="" />
+        <span>List Users</span>
+      </template>
+      </v-list-item>
+
+      <!-- Link-->
       <v-list-item link @click="router.push('/')">
       <template #default>
         <v-icon class="me-2" icon="" />
         <span></span>
       </template>
       </v-list-item>
-      <v-list-item link title="List Item 3"></v-list-item>
-
 
     </v-navigation-drawer>
 

@@ -15,6 +15,9 @@ from .views import (
     MenuListViewEditor,
     viewAllUserShiftAvailability,
     LogoutView,
+    listAllUsers,
+    countAllUsers,
+    
 )
 
 urlpatterns = [
@@ -23,6 +26,13 @@ urlpatterns = [
     path('api/logout/', LogoutView.as_view()),
     path('get-token/', get_csrf_token ),
     path('api/check-auth/', check_auth, name='check_auth'),
+    
+    ## List Users 
+    path('api/list-users/', listAllUsers.as_view()),
+    path('api/count-users/', countAllUsers),
+    
+    
+    ## Menus
     path('api/get-menu', MenuView.as_view(), name='menu-view'),
     path('api/edit-menu/<int:pk>', MenuViewEditor.as_view(), name='menu-edit'),
     path('api/edit-dish/<int:pk>', DishEditor.as_view(), name='dish-edit'),
