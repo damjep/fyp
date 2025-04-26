@@ -9,6 +9,7 @@ from .views import (
     getOrderItems,
     deleteOrderItems,
     getOrCreatePayment,
+    revert_payment,
     
 )
 
@@ -25,6 +26,9 @@ urlpatterns = [
     
     #paymentComponent
     path('pos-api/get-create-payment/', getOrCreatePayment.as_view() ),
+    
+    #past orders
+    path('pos-api/revert-payment/<int:payment_id>/', revert_payment),
     
     #delete orderitems from order
     path('pos-api/<int:order_id>/items/<int:order_item_id>', deleteOrderItems.as_view())

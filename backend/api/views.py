@@ -5,7 +5,7 @@ from django.http import JsonResponse
 import logging
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from typing import Dict, Any
 import json
 from rest_framework.views import APIView
@@ -52,6 +52,13 @@ class LoginView(APIView):
         except Exception as e:
             logger.error(f"Login error: {e}")
             return Response({'error': 'An unexpected error occurred'}, status=500)
+        
+class LogoutView(APIView):
+    def post(self, request):
+        logout(request)  # Logs out the user by clearing the session
+        response = Response({"message": "Logout successful"})
+        response.delete_cookie("csrftoken")  # Optional: also delete the CSRF cookie
+        return response
 
 class ProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer

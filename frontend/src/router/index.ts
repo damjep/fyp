@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '@/components/Login.vue'
+import Login from '@/components/Auth/Login.vue'
 import HomeView from '@/views/HomeView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import MenuView from '@/views/MenuView.vue'
@@ -7,6 +7,7 @@ import MenuEditorView from '@/views/ManagerView/menu/MenuEditorView.vue'
 import ManagerShiftMaker from '@/views/ManagerView/shifts/ManagerShiftMaker.vue'
 import Pos from '@/views/PosV/Pos.vue'
 import PosTabs from '@/views/PosV/posTabs/posTabs.vue'
+import { useUserStore } from '@/stores/userStore'
 
 
 const router = createRouter({
@@ -42,6 +43,7 @@ const router = createRouter({
       path: '/pos',
       name: 'pos',
       component: PosTabs,
+      meta: { requiresAuth: true },
     },
     {
       path: '/profile',
@@ -58,7 +60,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !localStorage.getItem('token')) {
+
+  const userStore = useUserStore()
+
+  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
     next({ name: 'login' })
   } else {
     next()

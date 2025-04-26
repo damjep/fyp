@@ -36,9 +36,11 @@
             <h1>{{ category }}</h1>
             <table class="table">
                 <thead>
+                  <tr>
                     <th>Dish</th>
                     <th>Quantity</th>
                     <th>Add ?</th>
+                  </tr>
                 </thead>
                 <tbody>
                     <tr v-for="dish in item" :key="dish.id">

@@ -11,10 +11,12 @@
         <div class="card-body">
             <table class="table">
                 <thead>
-                    <th>Takeaway Order</th>
-                    <th>Total Price</th>
-                    <th>Edit</th>
-                    <th>Payment</th>
+                    <tr>
+                        <th>Takeaway Order</th>
+                        <th>Total Price</th>
+                        <th>Edit</th>
+                        <th>Payment</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr v-if="takeawayOrderList" v-for="items in takeawayOrderList" :id="items.id">
@@ -55,6 +57,7 @@ const emit = defineEmits(['modal-takeaway-edit-items', 'total_price'])
 const props = defineProps<{
     order_id: number, 
     paid_id: number,
+    paymentReverted: boolean,
 }>()
 
 async function getTakeawayOrderList() {
@@ -66,11 +69,14 @@ async function getTakeawayOrderList() {
     }
 }
 
-watch(() => (props.order_id, props.paid_id) , async () => {
-    if(props.order_id !== null || props.paid_id !== null){
-        await getTakeawayOrderList()
-    }
-}, {immediate: true})
+watch(
+  () => [props.order_id, props.paid_id, props.paymentReverted],
+  async () => {
+    await getTakeawayOrderList()
+  },
+  { immediate: true }
+)
+
 
 onMounted( async () => {
     await getTakeawayOrderList()

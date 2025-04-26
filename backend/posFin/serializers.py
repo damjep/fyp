@@ -68,9 +68,15 @@ class addOrderItemsSerializer(serializers.ModelSerializer):
         
 ## payment 
 class getOrCreatePayment(serializers.ModelSerializer):
+    order_created_at = serializers.DateTimeField(source='order.created_at', read_only=True)
+    order_dine_type = serializers.CharField(source='order.order_type', read_only = True)
+    order_number = serializers.CharField(source='order.order_number', read_only=True)
+    
     class Meta:
         model = Payment
-        fields = ['id', 'order', 'payment_method', 'amount_paid']
+        fields = ['id', 'order', 'payment_method', 'amount_paid', 
+                  'order_created_at', 'order_dine_type', 'timestamp',
+                  'order_number']
         read_only_fields = ['timestamp']
         
     def create(self, validated_data):
@@ -83,4 +89,5 @@ class getOrCreatePayment(serializers.ModelSerializer):
             payment_method = payment_method,
             amount_paid = amount_paid,
         )
+
         

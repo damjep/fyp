@@ -8,9 +8,17 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <button class="nav-link" aria-current="page" @click="router.push('/')">Home</button>
-                <a class="nav-link" @click="router.push('/profile')">Profile</a>
                 <a class="nav-link" @click="router.push('/menu')">Menu</a>
-                <a class="nav-link" @click="router.push('/pos')">Pos</a>
+                <a class="nav-link" v-if="userStore.isAuthenticated == true"
+                @click="router.push('/pos')">Pos</a>
+            </div>
+            <div class="navbar-nav ms-auto pr-4">
+                <a class="nav-link border " @click="router.push('/login')">
+                    <v-icon icon="mdi-login"></v-icon> Login
+                </a>
+                <a class="nav-link border " @click="logout" v-if="userStore.isAuthenticated == true">
+                    <v-icon icon="mdi-logout"></v-icon> Logout
+                </a>
             </div>
             </div>
         </div>
@@ -18,6 +26,22 @@
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/stores/userStore';
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 const router = useRouter();
+const userStore = useUserStore()
+
+async function logout(){
+    try {
+        const res = await axios.post('api/logout/', {}, {
+            withCredentials: true,
+        })
+        userStore.logout()
+        router.push('/')
+    } catch (err){
+
+    }
+}
+
 </script>

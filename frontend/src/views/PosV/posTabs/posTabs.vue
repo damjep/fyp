@@ -8,10 +8,10 @@
             Table
         </v-tab>
         <v-tab value="two">
-            Pos
+            Takeaway
         </v-tab>
         <v-tab value="three">
-            Takeaway
+            Past Orders 
         </v-tab>
     </v-tabs>
 
@@ -24,13 +24,13 @@
             </v-tabs-window-item>
 
             <v-tabs-window-item value="two">
-                <Pos />
+                <TakeAwayView @total_price="handlePrice"
+                :order_id="takeawayOrderId" :paid_id="paid_id"
+                @modal-takeaway-edit-items="handleNewTakeawayOrderId" :payment-reverted="boolPaymentReverted"/>
             </v-tabs-window-item>
 
             <v-tabs-window-item value="three">
-                <TakeAwayView @total_price="handlePrice"
-                :order_id="takeawayOrderId" :paid_id="paid_id"
-                @modal-takeaway-edit-items="handleNewTakeawayOrderId"/>
+                <PastOrderView @payment-reverted="handlePaymentReverted" :paid="paid_id"/>
             </v-tabs-window-item>
         </v-tabs-window>
     </v-card-text>
@@ -59,6 +59,7 @@ import TakeAwayView from '../TakeAwayView/takeAwayView.vue';
 import AddTakeAwayOrderModal from '../TakeAwayView/addTakeAwayOrderModal/addTakeAwayOrderModal.vue';
 import AddOrderItemsModal from '../TakeAwayView/addOrderItemsModal/addOrderItemsModal.vue';
 import PaymentModal from '../TakeAwayView/paymentModal.vue';
+import PastOrderView from '../pastOrderView/pastOrderView.vue';
 
 const tab = ref()
 const selectedTable = ref()
@@ -68,6 +69,7 @@ const tableEdited = ref(false)
 const takeawayOrderId = ref()
 const total_price = ref()
 const paid_id = ref()
+const boolPaymentReverted = ref(false)
 
 function handleNewTakeawayOrderId(id: number){
     takeawayOrderId.value = id
@@ -90,6 +92,9 @@ function handlePrice(price: number){
 }
 function handlePaidID(id: number){
     paid_id.value = id;
+}
+function handlePaymentReverted() {
+    boolPaymentReverted.value = !boolPaymentReverted.value
 }
 
 </script>

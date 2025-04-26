@@ -13,12 +13,14 @@ from .views import (
     ListMenuRawView,
     EditDishTypesView,
     MenuListViewEditor,
-    viewAllUserShiftAvailability
+    viewAllUserShiftAvailability,
+    LogoutView,
 )
 
 urlpatterns = [
     path('api/profile-view/', ProfileView.as_view(), name='profile-view'),
     path('api/login/',LoginView.as_view(), name='login'),
+    path('api/logout/', LogoutView.as_view()),
     path('get-token/', get_csrf_token ),
     path('api/check-auth/', check_auth, name='check_auth'),
     path('api/get-menu', MenuView.as_view(), name='menu-view'),

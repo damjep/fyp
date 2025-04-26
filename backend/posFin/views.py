@@ -7,7 +7,9 @@ from .serializers import (viewTableSerializer,
                           orderItemsPerIdSerializer,
                           addOrderItemsSerializer,
                           getOrCreatePayment)
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
 
 def getStatusChoices(request):
     if request.method == 'GET':
@@ -34,6 +36,26 @@ class getOrCreatePayment(generics.ListCreateAPIView):
     serializer_class = getOrCreatePayment
     permission_classes = [permissions.AllowAny]
     queryset = Payment.objects.all()
+    
+@api_view(['DELETE'])
+@permission_classes([permissions.AllowAny])
+def revert_payment(request, payment_id):
+    try:
+        payment = Payment.objects.get(id=payment_id)
+        order = payment.order
+
+        # Delete the payment
+        payment.delete()
+
+        # Set order status back to "unpaid"
+        order.status = "pending"
+        order.save()
+
+        return Response({"message": "Payment reverted successfully."}, status=status.HTTP_200_OK)
+
+    except Payment.DoesNotExist:
+        return Response({"error": "Payment not found."}, status=status.HTTP_404_NOT_FOUND)
+
 
 class getOrderByID(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = addOrderByTableSerializer
