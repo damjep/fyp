@@ -10,6 +10,7 @@ import PosTabs from '@/views/PosV/posTabs/posTabs.vue'
 import { useUserStore } from '@/stores/userStore'
 import ListUsersView from '@/views/ManagerView/employees/listUsersView.vue'
 import DashboardManager from '@/views/ManagerView/Dashboard/dashboardManager.vue'
+import FinanceView from '@/views/ManagerView/finance/financeView.vue'
 
 
 const router = createRouter({
@@ -63,6 +64,12 @@ const router = createRouter({
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardManager,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/finance',
+      name: 'finance',
+      component: FinanceView,
       meta: { requiresAuth: true },
     },
     { path: '/:pathMatch(.*)*', redirect: '/' },

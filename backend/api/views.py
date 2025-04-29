@@ -14,7 +14,8 @@ from .serializers import (
     CategoryListSerializer, MenuSerializer, 
     MenuEditSerializer, DishTypeSerializer ,
     DishSerializer, UserShiftsOnlySerializer,
-    ListUserSerializer, )
+    ListUserSerializer, UpdateUserRoleSerializer,
+    )
 from .models import User, Category, Dish, DishType
 from rest_framework import generics, permissions
 from django.middleware.csrf import get_token
@@ -72,10 +73,26 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 ## Manager Users
-class listAllUsers(generics.ListAPIView):
+class listAllUsers(generics.ListCreateAPIView):
     serializer_class = ListUserSerializer
     queryset = User.objects.all()
     permission_classes = [permissions.IsAuthenticated]
+    
+class updateUserRole(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UpdateUserRoleSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = User.objects.all()
+    
+    def get_object(self):
+        user_id = self.kwargs.get('pk')
+        return get_object_or_404(User, pk=user_id)
+    
+class UserRolesView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        roles = [{"value": role.value, "label": role.label} for role in User.Role]
+        return Response(roles)
     
 def countAllUsers(request):
     if request.method == 'GET':

@@ -17,6 +17,9 @@ from .views import (
     LogoutView,
     listAllUsers,
     countAllUsers,
+    UserRolesView,
+    updateUserRole,
+    
     
 )
 
@@ -30,7 +33,8 @@ urlpatterns = [
     ## List Users 
     path('api/list-users/', listAllUsers.as_view()),
     path('api/count-users/', countAllUsers),
-    
+    path('api/get-roles-enum/', UserRolesView.as_view()),
+    path('api/update-user-role/<int:pk>/', updateUserRole.as_view() ),
     
     ## Menus
     path('api/get-menu', MenuView.as_view(), name='menu-view'),

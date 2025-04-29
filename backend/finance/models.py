@@ -39,3 +39,5 @@ class FinanceReport(models.Model):
             record.total_service_charge = total_service_charge
             record.save()
     
+    def __str__(self):
+        return f"{self.date} - Total Sales: {self.total_sales}"

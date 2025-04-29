@@ -72,6 +72,16 @@ const userStore = useUserStore()
       </template>
       </v-list-item>
 
+      <!-- Link-->
+      <v-list-item link @click="router.push('/finance')">
+      <template #default>
+        <v-icon class="me-2" icon="" />
+        <span>Finance</span>
+      </template>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
       <!--Menu Editor Link-->
       <v-list-item v-if="userStore.role == 'Manager'"
       link @click="router.push('/menu-edit')">

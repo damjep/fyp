@@ -55,8 +55,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Role(models.TextChoices):
         MANAGER = 'Manager'
         EMPLOYEE = 'Employee'
+        KITCHEN_STAFF = 'Kitchen Staff'
     
-    role = models.CharField(max_length=10, choices=Role.choices, default=Role.EMPLOYEE)
+    role = models.CharField(max_length=20, choices=Role.choices, default=Role.EMPLOYEE)
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
