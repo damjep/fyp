@@ -43,7 +43,7 @@ defineProps<{
 
 async function deleteShift(idDelete:any) {
     try {
-        await axios.delete(`/shifts/update-shift/${idDelete}`, 
+        await axios.delete(`shifts-api/update-shift/${idDelete}`, 
             {withCredentials: true,}
         )
 

@@ -94,7 +94,7 @@ defineProps<{
 
 async function editShift(item:any) {
     try {
-        await axios.patch(`/shifts/update-shift/${item.id}`, {
+        await axios.patch(`shifts-api/update-shift/${item.id}`, {
             days: item.days,
             shift_type: item.shift_type,
             shift_start: item.shift_start,

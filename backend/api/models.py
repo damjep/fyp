@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.core.exceptions import ValidationError
 from typing import Optional
 from django.apps import apps
+from inventory.models import Inventory
 
 
 class UserManager(BaseUserManager):
@@ -47,6 +48,7 @@ class Dish(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=5, decimal_places=2)
     description = models.TextField(blank=True)
+    inventory_item = models.ForeignKey(Inventory, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name

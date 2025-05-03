@@ -123,13 +123,13 @@ const emit = defineEmits(['dataModalAdd'])
 
 async function getModalData() {
     try {
-        const resDay = await axios.get('shifts/getShiftsDays', {
+        const resDay = await axios.get('shifts-api/getShiftsDays', {
             withCredentials: true,
         })
-        const resShiftType = await axios.get('shifts/getShiftTypes', {
+        const resShiftType = await axios.get('shifts-api/getShiftTypes', {
             withCredentials: true,
         })
-        const resHours = await axios.get('shifts/getHours', {
+        const resHours = await axios.get('shifts-api/getHours', {
             withCredentials: true,
         })
         dataModal.value.days = resDay.data
@@ -145,7 +145,7 @@ async function getModalData() {
 
 async function addShift(){
     try {
-        await axios.post('shifts/get-or-create-shifts', {
+        await axios.post('shifts-api/get-or-create-shifts', {
             days: dataModalAdd.value.days,
             shift_type: dataModalAdd.value.shift_type,
             shift_start: dataModalAdd.value.shift_start,

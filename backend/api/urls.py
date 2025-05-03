@@ -19,6 +19,7 @@ from .views import (
     countAllUsers,
     UserRolesView,
     updateUserRole,
+    shiftsAvailabilityPerUser,
     
     
 )
@@ -34,7 +35,8 @@ urlpatterns = [
     path('api/list-users/', listAllUsers.as_view()),
     path('api/count-users/', countAllUsers),
     path('api/get-roles-enum/', UserRolesView.as_view()),
-    path('api/update-user-role/<int:pk>/', updateUserRole.as_view() ),
+    path('api/update-user-role/<int:pk>/', updateUserRole.as_view()),
+    path('api/update-shifts/', shiftsAvailabilityPerUser.as_view()),
     
     ## Menus
     path('api/get-menu', MenuView.as_view(), name='menu-view'),

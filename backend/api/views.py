@@ -15,6 +15,8 @@ from .serializers import (
     MenuEditSerializer, DishTypeSerializer ,
     DishSerializer, UserShiftsOnlySerializer,
     ListUserSerializer, UpdateUserRoleSerializer,
+    UpdateShiftsSerializer, ListShiftsAvailabilitySerializer,
+    
     )
 from .models import User, Category, Dish, DishType
 from rest_framework import generics, permissions
@@ -98,6 +100,18 @@ def countAllUsers(request):
     if request.method == 'GET':
         data = User.objects.values('role').annotate(count=Count('role'))
         return JsonResponse(list(data), safe=False)
+    
+class shiftsAvailabilityPerUser(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_object(self):
+        return self.request.user
+    
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ListShiftsAvailabilitySerializer
+        return UpdateShiftsSerializer
 
 ## Menus  
 class MenuView(generics.ListAPIView):

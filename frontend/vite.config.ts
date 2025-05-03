@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => ({
                 changeOrigin: true,
                 secure: false,
             },
-            '/shifts': {
+            '/shifts-api': {
                 target: 'http://127.0.0.1:8000',  // Proxy API requests to Django
                 changeOrigin: true,
                 secure: false,
@@ -32,6 +32,11 @@ export default defineConfig(({ mode }) => ({
                 secure: false,
             },
             '/finance': {
+                target: 'http://127.0.0.1:8000',  // Proxy API requests to Django
+                changeOrigin: true,
+                secure: false,
+            },
+            '/stocks-api': {
                 target: 'http://127.0.0.1:8000',  // Proxy API requests to Django
                 changeOrigin: true,
                 secure: false,

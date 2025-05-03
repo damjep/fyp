@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User, Category, Dish, DishType
+from shifts.serializers import ShiftSerializer
 from django.shortcuts import get_object_or_404
 
 class LoginSerializer(serializers.Serializer):
@@ -43,7 +44,22 @@ class UpdateUserRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','name', 'email', 'role']
-        read_only_fields = ['id']        
+        read_only_fields = ['id']     
+    
+# Shifts Available Users
+class UpdateShiftsSerializer(serializers.ModelSerializer):    
+    class Meta: 
+        model = User
+        fields = ['id', 'name', 'email', 'shift_available']
+        read_only_fields = ['id', 'name', 'email']
+
+class ListShiftsAvailabilitySerializer(serializers.ModelSerializer):
+    shift_available = ShiftSerializer(many=True)
+    class Meta:
+        model = User
+        fields = ['id', 'name', 'email', 'shift_available']
+        read_only_fields = ['id', 'name', 'email']
+
         
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

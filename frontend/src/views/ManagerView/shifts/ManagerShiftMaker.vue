@@ -78,7 +78,7 @@ const handleDataModal = (x: any) => {
 
 async function fetchShifts() {
     try {
-        const response = await axios.get('shifts/get-or-create-shifts', {
+        const response = await axios.get('shifts-api/get-or-create-shifts', {
             withCredentials: true,
         })
 

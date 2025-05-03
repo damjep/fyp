@@ -88,6 +88,25 @@ class Payment(models.Model):
     def update_status(self):
         self.order.status = 'paid'
         
+    def revert_inventory(self):
+        for order_item in self.order.orderitem_set.all():
+            dish = order_item.dish
+            inventory_item = dish.inventory_item
+
+            if inventory_item:
+                total_to_restore = order_item.quantity
+                inventory_item.quantity += total_to_restore
+                inventory_item.save(update_fields=['quantity'])
+
+
+    def delete(self, *args, **kwargs):
+        if self.order.status == 'paid':
+            self.revert_inventory()
+            self.order.status = 'pending'  # Or whatever your unpaid status is
+            self.order.save(update_fields=['status'])
+        super().delete(*args, **kwargs)
+
+        
     def clean(self):
         if self.order.total_price > self.amount_paid:
             raise ValidationError("Amount Paid is Less")
@@ -96,10 +115,35 @@ class Payment(models.Model):
             self.order.save(update_fields=['tips'])
         super().clean()
         
+    def update_inventory(self):
+        for order_item in self.order.orderitem_set.all():  # 👈 Loops through all OrderItems in the order
+            dish = order_item.dish
+            inventory_item = dish.inventory_item  # 🚨 We can now access this because we added it to Dish!
+
+            if inventory_item:
+                total_needed = order_item.quantity
+                if inventory_item.quantity < total_needed:
+                    raise ValidationError(f"Not enough stock for {inventory_item.name}")
+
+                inventory_item.quantity -= total_needed
+                inventory_item.save(update_fields=['quantity'])    
+                
     def save(self, *args, **kwargs):
+        is_new_payment = self._state.adding
+        if not is_new_payment:
+            # Existing payment being updated: first revert inventory
+            if self.order.status == 'paid':
+                self.revert_inventory()
+
         self.update_status()
         super().save(*args, **kwargs)
         self.order.save(update_fields=['status'])
+
+        if self.order.status == 'paid':
+            self.update_inventory()
+
+        
+    
         
     def __str__(self):
         return f"{self.order.table_Number}: {self.timestamp}"

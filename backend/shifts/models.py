@@ -33,6 +33,11 @@ class Shift(models.Model):
     def __str__(self):
         return f"{self.days} {self.shift_type} from {self.shift_start}:00 to {self.shift_end}:00"
     
+class ShiftAvailability(models.Model):
+    shift_item = models.ForeignKey(Shift, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+        
+    
 class Rota(models.Model):
     users = models.ManyToManyField(User, related_name='rotas')
     shifts = models.ForeignKey(Shift, on_delete=models.CASCADE)

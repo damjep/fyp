@@ -11,6 +11,8 @@ import { useUserStore } from '@/stores/userStore'
 import ListUsersView from '@/views/ManagerView/employees/listUsersView.vue'
 import DashboardManager from '@/views/ManagerView/Dashboard/dashboardManager.vue'
 import FinanceView from '@/views/ManagerView/finance/financeView.vue'
+import Inventory from '@/views/ManagerView/Inventory/inventory.vue'
+import ShiftsAvailability from '@/views/ManagerView/shifts/shiftsAvailability/shiftsAvailability.vue'
 
 
 const router = createRouter({
@@ -70,6 +72,18 @@ const router = createRouter({
       path: '/finance',
       name: 'finance',
       component: FinanceView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/inventory',
+      name: 'inventory',
+      component: Inventory,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/shifts',
+      name: 'shifts',
+      component: ShiftsAvailability,
       meta: { requiresAuth: true },
     },
     { path: '/:pathMatch(.*)*', redirect: '/' },

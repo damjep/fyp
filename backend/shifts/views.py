@@ -1,11 +1,20 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import generics
-from .models import Shift
-from rest_framework.permissions import AllowAny
-from .serializers import ShiftSerializer, DaySerializer, HourSerializer, ShiftTypeSerializer
+from .models import Shift, ShiftAvailability
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from .serializers import ShiftSerializer, DaySerializer, HourSerializer, ShiftTypeSerializer, ShiftAvailSerializer, ShiftAvailUpdateSerializer
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
+
+class createUpdateShiftsAvailability(generics.ListCreateAPIView):
+    queryset = ShiftAvailability.objects.all()
+    permission_class = [IsAuthenticated]       
+    
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ShiftAvailSerializer     
+        return ShiftAvailUpdateSerializer
 
 class getOrCreateShifts(generics.ListCreateAPIView):
     queryset = Shift.objects.all()

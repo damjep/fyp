@@ -4,12 +4,14 @@ import { ref } from "vue"
 
 export const useUserStore = defineStore('userStore', () => {
   const user = ref<{
+    id: number,
     role: string | any,
     name:string | any,
     email: string | any,
     is_active:boolean | any,
     is_staff: boolean | any,
   } | null>({
+    id: 0,
     role: '',
     name: '',
     email: '',

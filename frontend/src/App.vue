@@ -5,6 +5,7 @@ import axios from 'axios';
 import ManagerNavDrawer from './components/ManagerNavDrawer.vue';
 import router from './router';
 import { useUserStore } from './stores/userStore';
+import { ref } from 'vue';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -12,13 +13,19 @@ axios.defaults.withCredentials = true;  // Ensures cookies are sent with each re
 
 const userStore = useUserStore()
 
+const show = ref('visually-hidden')
+
+function handleShow(){
+  show.value = 'visually hidden'
+  return show.value
+}
 </script>
 
 <template>
   <v-app>
 
     <!--Employee Nav (authenticated)-->
-    <v-navigation-drawer :width="164" 
+    <v-navigation-drawer :width="180" 
     v-if="userStore.isAuthenticated == true">
       <br>
       <v-list-item :title="'Welcome '+userStore.user?.name+'!'" 
@@ -38,7 +45,7 @@ const userStore = useUserStore()
       <!--Profile View-->
       <v-list-item link @click="router.push('/dashboard')">
         <template #default>
-          <v-icon class="me-2" icon="mdi-account" />
+          <v-icon class="me-2" icon="mdi-monitor-dashboard" />
           <span>Dashboard</span>
         </template>
       </v-list-item> 
@@ -55,10 +62,12 @@ const userStore = useUserStore()
       </v-list-item>
 
       <!-- Link-->
-      <v-list-item link @click="router.push('/')">
+      <v-list-item link @click="router.push('/shifts')">
       <template #default>
-        <v-icon class="me-2" icon="" />
+        <v-icon class="me-2" icon="mdi-clipboard" />
         <span>Shifts</span>
+        <br>
+        <span>Availability</span>
       </template>
       </v-list-item>
 
@@ -75,7 +84,7 @@ const userStore = useUserStore()
       <!-- Link-->
       <v-list-item link @click="router.push('/finance')">
       <template #default>
-        <v-icon class="me-2" icon="" />
+        <v-icon class="me-2" icon="mdi-finance" />
         <span>Finance</span>
       </template>
       </v-list-item>
@@ -99,20 +108,19 @@ const userStore = useUserStore()
         <span>Shifts Editor</span>
       </template>
       </v-list-item>
-      
-      <!-- Link-->
-      <v-list-item link @click="router.push('/list-users')">
-      <template #default>
-        <v-icon class="me-2" icon="" />
-        <span>List Users</span>
-      </template>
-      </v-list-item>
 
       <!-- Link-->
-      <v-list-item link @click="router.push('/')">
+      <v-list-item link @click="router.push('/inventory')">
       <template #default>
-        <v-icon class="me-2" icon="" />
-        <span></span>
+        <v-icon class="me-2" icon="mdi-archive" />
+        <span>Inventory
+
+          <span class="position-absolute top-0 start-75 translate-middle badge rounded-pill bg-danger" :class="show">
+           9
+          <span class="visually-hidden">unread messages</span>
+          </span>
+        </span>
+          
       </template>
       </v-list-item>
 

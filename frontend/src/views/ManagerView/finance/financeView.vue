@@ -1,5 +1,5 @@
 <template>
-    <button type="submit" class="btn btn-success"
+    <button type="submit" class="btn btn-success mb-4"
     @click="getFinanceReport">
         Update Report
     </button>
