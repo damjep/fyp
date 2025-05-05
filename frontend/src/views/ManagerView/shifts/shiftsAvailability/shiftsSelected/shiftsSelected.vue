@@ -13,7 +13,8 @@
                 <tr v-if="shiftsData" v-for="item in shiftsData" >
                     <td>{{ item.shift_item_str }}</td>
                     <td>
-                        <button type="button" class="btn btn-danger">
+                        <button type="button" class="btn btn-danger"
+                        @click="deleteShifts(item.id)">
                             delete
                         </button>
                     </td>
@@ -36,8 +37,10 @@ import { onMounted, ref, watch } from 'vue';
 const shiftsData = ref()
 
 const props = defineProps<{
-    id: boolean,
+    id: number,
 }>()
+
+const emit = defineEmits(['item-deleted'])
 
 const userStore = useUserStore()
 
@@ -53,6 +56,22 @@ async function getShifts() {
         shiftsData.value = res.data.filter((item:any) => item.user == userStore.getUserData()?.id)
         console.log(shiftsData.value)
     } catch (err){}
+}
+
+async function deleteShifts(id:number){
+    try {
+        const res = await axios.delete(`shifts-api/delete/${id}/`, {
+            withCredentials: true,
+            headers: {
+                'X-CSRFToken': userStore.getUserToken()
+            }
+        })
+
+        emit('item-deleted', id)
+        await getShifts()
+    } catch (err){
+
+    }
 }
 
 onMounted(async () => {

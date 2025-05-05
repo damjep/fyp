@@ -13,6 +13,8 @@ import DashboardManager from '@/views/ManagerView/Dashboard/dashboardManager.vue
 import FinanceView from '@/views/ManagerView/finance/financeView.vue'
 import Inventory from '@/views/ManagerView/Inventory/inventory.vue'
 import ShiftsAvailability from '@/views/ManagerView/shifts/shiftsAvailability/shiftsAvailability.vue'
+import RotaScheduler from '@/views/ManagerView/shifts/Rota/RotaScheduler.vue'
+import RotaList from '@/views/ManagerView/shifts/Rota/RotaView/RotaList.vue'
 
 
 const router = createRouter({
@@ -84,6 +86,18 @@ const router = createRouter({
       path: '/shifts',
       name: 'shifts',
       component: ShiftsAvailability,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/rota-scheduler',
+      name: 'rota-scheduler',
+      component: RotaScheduler,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/rotalist',
+      name: 'rotalist',
+      component: RotaList,
       meta: { requiresAuth: true },
     },
     { path: '/:pathMatch(.*)*', redirect: '/' },

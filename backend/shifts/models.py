@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django import forms
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 User = get_user_model()
     
@@ -37,11 +39,14 @@ class ShiftAvailability(models.Model):
     shift_item = models.ForeignKey(Shift, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
         
+    def __str__(self):
+        return f"{self.user.name} - {self.shift_item}"
     
 class Rota(models.Model):
-    users = models.ManyToManyField(User, related_name='rotas')
-    shifts = models.ForeignKey(Shift, on_delete=models.CASCADE)
+    start_date = models.DateField(blank=True, null=True, unique=True)
+    end_date = models.DateField(blank=True, null=True, unique=True)
+    shifts = models.ManyToManyField(ShiftAvailability)
 
     def __str__(self):
-        return f"Rota for {self.shifts.days} - {self.users.count()} users"
+        return f"Week {self.start_date} - {self.end_date}"
         

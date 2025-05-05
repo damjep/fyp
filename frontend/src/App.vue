@@ -71,6 +71,25 @@ function handleShow(){
       </template>
       </v-list-item>
 
+      <!-- Link-->
+      <v-list-item link @click="router.push('/rota-scheduler')">
+      <template #default>
+        <v-icon class="me-2" icon="mdi-clipboard" />
+        <span>Rota</span>
+        <br>
+        <span>Scheduler</span>
+      </template>
+      </v-list-item>
+
+      <!-- Link-->
+      <v-list-item v-if="userStore.role == 'Manager'"
+      link @click="router.push('/rotalist')">
+      <template #default>
+        <v-icon class="me-2" icon="mdi-view-list-outline" />
+        <span>Rota</span>
+      </template>
+      </v-list-item>
+
       <v-divider></v-divider>
 
       <!--POS Link-->

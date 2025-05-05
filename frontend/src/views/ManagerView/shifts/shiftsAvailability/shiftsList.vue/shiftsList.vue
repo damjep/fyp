@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore';
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { tr } from 'vuetify/locale';
 
 const userStore = useUserStore()
@@ -43,6 +43,10 @@ const shiftsData = ref()
 const selectedShifts = ref()
 
 const emit = defineEmits(['item-added'])
+
+const props = defineProps<{
+    idDeleted: number
+}>()
 
 async function getShifts() {
     try {
@@ -68,8 +72,10 @@ async function getShiftsList() {
             withCredentials: true
         })
 
-        selectedShifts.value
-        shiftsData.value = res.data.filter((item: any) => item.id != selectedShifts.value.map((x:any) => x.shift_item)  )
+        shiftsData.value = res.data.filter((item: any) =>
+            !selectedShifts.value.map((x: any) => x.shift_item).includes(item.id)
+        )
+
     } catch(err){}
 }
 
@@ -86,13 +92,23 @@ async function updateShifts(id: number){
 
         })
 
-        emit('item-added')
+        emit('item-added', id)
+        getShifts()
+        getShiftsList()
 
     } catch (err) {
         console.log(err)
     }
 }
+
 onMounted(async () => {
     await getShiftsList()
 })
+
+watch(() => props.idDeleted , async(newID: number) => {
+    if(newID){
+        await getShifts()
+        await getShiftsList()
+    }
+}, {immediate:true})
 </script>

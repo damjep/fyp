@@ -3,10 +3,10 @@
     <div class="card-body">
         <div class="row">
             <div class="col">
-                <ShiftsList @item-added="handleItemAdded"/>
+                <ShiftsList @item-added="handleItemAdded" :id-deleted="deletedId"/>
             </div>
             <div class="col">
-                <ShiftsSelected :id="newId"/>
+                <ShiftsSelected :id="newId" @item-deleted="handleItemDeleted"/>
             </div>
         </div>
     </div>
@@ -18,9 +18,13 @@ import { ref } from 'vue';
 import ShiftsList from './shiftsList.vue/shiftsList.vue';
 import ShiftsSelected from './shiftsSelected/shiftsSelected.vue';
 
-const newId = ref(false)
+const newId = ref(0)
+const deletedId = ref(0)
 
-function handleItemAdded(){
-    newId.value = !newId.value
+function handleItemDeleted(state:number){
+    deletedId.value = state
+}
+function handleItemAdded(state: number){
+    newId.value = state
 }
 </script>
