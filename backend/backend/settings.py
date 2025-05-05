@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'inventory',
     'posFin',
     'finance',
+    'rating',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

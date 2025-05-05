@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('inventory.urls')),
     path('', include('posFin.urls')),
     path('', include('finance.urls')),
+    path('', include('rating.urls')),
         
     # API endpoints
 ]
