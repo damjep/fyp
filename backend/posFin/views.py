@@ -10,6 +10,9 @@ from .serializers import (viewTableSerializer,
 from rest_framework import serializers, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.db.models import Sum
+
 
 def getStatusChoices(request):
     if request.method == 'GET':
@@ -115,4 +118,23 @@ class deleteOrderItems(generics.RetrieveDestroyAPIView):
     def get_object(self):
         order_item_id = self.kwargs['order_item_id']
         return get_object_or_404(OrderItem, pk=order_item_id)
+    
+class DishSalesChartAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]  # or AllowAny if public
+
+    def get(self, request, *args, **kwargs):
+        # Filter only OrderItems from 'paid' orders
+        dish_sales = (
+            OrderItem.objects.filter(order__status='paid')
+            .values('dish__name')
+            .annotate(total_quantity=Sum('quantity'))
+            .order_by('-total_quantity')
+        )
+        
+        # Format for chart: {dish_name: quantity}
+        data = {
+            item['dish__name']: item['total_quantity']
+            for item in dish_sales
+        }
+        return Response(data, status=status.HTTP_200_OK)
 

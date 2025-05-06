@@ -10,7 +10,7 @@ from .views import (
     deleteOrderItems,
     getOrCreatePayment,
     revert_payment,
-    
+    DishSalesChartAPIView
 )
 
 urlpatterns = [
@@ -29,7 +29,7 @@ urlpatterns = [
     
     #past orders
     path('pos-api/revert-payment/<int:payment_id>/', revert_payment),
-    
+    path('api/dish-sales-chart/', DishSalesChartAPIView.as_view(), name='dish-sales-chart'),
     #delete orderitems from order
     path('pos-api/<int:order_id>/items/<int:order_item_id>', deleteOrderItems.as_view())
 ]

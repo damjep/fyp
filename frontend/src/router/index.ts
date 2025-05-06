@@ -15,6 +15,9 @@ import Inventory from '@/views/ManagerView/Inventory/inventory.vue'
 import ShiftsAvailability from '@/views/ManagerView/shifts/shiftsAvailability/shiftsAvailability.vue'
 import RotaScheduler from '@/views/ManagerView/shifts/Rota/RotaScheduler.vue'
 import RotaList from '@/views/ManagerView/shifts/Rota/RotaView/RotaList.vue'
+import Rating from '@/views/PublicView/Rating/rating.vue'
+import ClockinOut from '@/views/ManagerView/shifts/ClockInOut/ClockinOut.vue'
+import TipsPerUserView from '@/views/ManagerView/finance/tipsPerUser/tipsPerUserView.vue'
 
 
 const router = createRouter({
@@ -99,6 +102,23 @@ const router = createRouter({
       name: 'rotalist',
       component: RotaList,
       meta: { requiresAuth: true },
+    },
+    {
+      path: '/clock',
+      name: 'clock',
+      component: ClockinOut,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/tips',
+      name: 'tips',
+      component: TipsPerUserView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/rating',
+      name: 'rating',
+      component: Rating,
     },
     { path: '/:pathMatch(.*)*', redirect: '/' },
     {

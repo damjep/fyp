@@ -29,6 +29,7 @@ urlpatterns = [
     path('', include('posFin.urls')),
     path('', include('finance.urls')),
     path('', include('rating.urls')),
+    path('', include('clockinout.urls')),
         
     # API endpoints
 ]

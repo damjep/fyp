@@ -7,3 +7,8 @@ class ListFinanceSerializer(serializers.ModelSerializer):
         model = FinanceReport
         fields = ['id','date', 'total_sales', 'total_tips', 'total_service_charge']
         read_only_fields = ['id']
+        
+class FinanceReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FinanceReport
+        fields = ['date', 'total_sales', 'total_tips', 'total_service_charge']

@@ -8,7 +8,9 @@ from .serializers import (
     ListSerializer
 )
 
+
 class AverageRatingAPIView(APIView):
+    permission_classes = [permissions.AllowAny]
     def get(self, request, *args, **kwargs):
         avg_rating = Rating.objects.aggregate(avg=Avg('rating'))['avg'] or 0
         avg_rating = round(avg_rating, 2)
@@ -17,4 +19,4 @@ class AverageRatingAPIView(APIView):
 class getCreateRatingList(generics.ListCreateAPIView):
     queryset= Rating.objects.all()
     serializer_class = ListSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]

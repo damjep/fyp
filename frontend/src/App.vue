@@ -72,7 +72,8 @@ function handleShow(){
       </v-list-item>
 
       <!-- Link-->
-      <v-list-item link @click="router.push('/rota-scheduler')">
+      <v-list-item link @click="router.push('/rota-scheduler')"
+      v-if="userStore.role == 'Manager'">
       <template #default>
         <v-icon class="me-2" icon="mdi-clipboard" />
         <span>Rota</span>
@@ -82,7 +83,15 @@ function handleShow(){
       </v-list-item>
 
       <!-- Link-->
-      <v-list-item v-if="userStore.role == 'Manager'"
+      <v-list-item link @click="router.push('/clock')">
+      <template #default>
+        <v-icon class="me-2" icon="mdi-clock" />
+        <span>Clock in/out</span>
+      </template>
+      </v-list-item>
+
+      <!-- Link-->
+      <v-list-item
       link @click="router.push('/rotalist')">
       <template #default>
         <v-icon class="me-2" icon="mdi-view-list-outline" />
@@ -101,10 +110,19 @@ function handleShow(){
       </v-list-item>
 
       <!-- Link-->
-      <v-list-item link @click="router.push('/finance')">
+      <v-list-item link @click="router.push('/finance')"
+      v-if="userStore.role == 'Manager'">
       <template #default>
         <v-icon class="me-2" icon="mdi-finance" />
         <span>Finance</span>
+      </template>
+      </v-list-item>
+
+      <!-- Link-->
+      <v-list-item link @click="router.push('/tips')">
+      <template #default>
+        <v-icon class="me-2" icon="mdi-finance" />
+        <span>Personal Tips</span>
       </template>
       </v-list-item>
 

@@ -9,6 +9,7 @@
             <div class="navbar-nav">
                 <button class="nav-link" aria-current="page" @click="router.push('/')">Home</button>
                 <a class="nav-link" @click="router.push('/menu')">Menu</a>
+                <a class="nav-link" @click="router.push('/rating')">Rating</a>
                 <a class="nav-link" v-if="userStore.isAuthenticated == true"
                 @click="router.push('/pos')">Pos</a>
             </div>

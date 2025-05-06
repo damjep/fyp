@@ -116,9 +116,9 @@ class Payment(models.Model):
         super().clean()
         
     def update_inventory(self):
-        for order_item in self.order.orderitem_set.all():  # 👈 Loops through all OrderItems in the order
+        for order_item in self.order.orderitem_set.all():  
             dish = order_item.dish
-            inventory_item = dish.inventory_item  # 🚨 We can now access this because we added it to Dish!
+            inventory_item = dish.inventory_item  
 
             if inventory_item:
                 total_needed = order_item.quantity
