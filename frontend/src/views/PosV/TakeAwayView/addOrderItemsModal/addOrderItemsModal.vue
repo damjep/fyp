@@ -31,7 +31,7 @@ data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ari
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3 mb-md-0" v-if="orderInfoData">
-                            <ExistingOrder :o_id="orderId" :data="orderInfoData"/>
+                            <ExistingOrder :o_id="orderId" :data="orderInfoData" :table_number="null"/>
                         </div>
                         <div class="col-md-6">
                             

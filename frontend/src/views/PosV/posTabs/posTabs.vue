@@ -37,7 +37,8 @@
 </v-card>
 
 <!--Table Modal-->
-<TableViewModal v-if="selectedTable" :id="selectedTable" :order-i-d="seatedData" />
+<TableViewModal v-if="selectedTable"
+ :id="selectedTable" :order-i-d="seatedData" />
 <AddTableModal @table-added="handleNewTableID"/>
 <EditTableModal @table-edited="handleTableEdited" />
 

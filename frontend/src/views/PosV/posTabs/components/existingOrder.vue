@@ -2,7 +2,7 @@
     <div class="container card h-75 mt-5" 
     style="display: block; overflow-y: auto;">
         <div class="card-body" >
-            <form >
+            <form @submit.prevent="save">
                 <div class="mb-3 row">
                     <label for="" 
                     class="col-sm-4 col-form-label">Order Number</label>
@@ -14,7 +14,7 @@
                     </div>
                 </div>
 
-                <div class="mb-3 row" v-if="data.order_type == 'dine-in'">
+                <div class="mb-3 row" >
                     <label for="" 
                     class="col-sm-4 col-form-label">Number of People</label>
                     <div class="col-sm-8">
@@ -63,12 +63,17 @@
                         class="form-control" >
                     </div>
                 </div>
+
+                <button class="btn btn-success" type="submit">
+                    Save
+                </button>
             </form>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/stores/userStore';
 import axios from 'axios';
 import { onMounted, ref, watch } from 'vue';
 
@@ -83,9 +88,12 @@ const props = defineProps<{
         tips: number,
         order_type: string
     }
+    table_number: number | null
 }>()
 
 const status_choices = ref()
+const userStore = useUserStore()
+const emit = defineEmits(['order-added'])
 
 async function getChoices() {
     try {
@@ -97,6 +105,24 @@ async function getChoices() {
     }
 }
 
+async function save() {
+    try {
+        const res = await axios.patch(`pos-api/get-order-by-id/${props.o_id}`, {
+            order_type: 'dine-in',
+            order_number: props.data.order_number,
+            num_people: props.data.num_people,
+            table_Number: props.table_number,
+            status: 'pending',
+        }, {
+            withCredentials: true,
+            headers: {
+                'X-CSRFToken': userStore.getUserToken()
+            }
+        })
+
+        emit('order-added', res.data.id)
+    } catch (err) {}
+}
 
 onMounted( async () => {
     await getChoices();

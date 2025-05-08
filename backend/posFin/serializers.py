@@ -8,9 +8,12 @@ class viewTableSerializer(serializers.ModelSerializer):
         fields = ['tableNo', 'max_seating', 'id']
         
 class addOrderByTableSerializer(serializers.ModelSerializer):
+    table_no_str = serializers.CharField(source='table_Number.tableNo', read_only=True)
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['order_number', 'table_Number', 'table_no_str',
+                  'created_at', 'id', 'order_type', 'num_people'
+                  ,'status','total_price', 'service_charge', 'tips' ]
         read_only_fields = ['id', 'created_at']
         
     def create(self, validated_data):
